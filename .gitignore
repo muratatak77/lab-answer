@@ -1,0 +1,36 @@
+*.exe
+*.orig
+*.rej
+*.so
+*~
+*.db
+.DS_Store
+._*
+/.idea
+/.fleet
+/.vscode/*.log
+/cmd/answer/*.sh
+/cmd/answer/answer
+/cmd/answer/uploads/*
+/cmd/logs
+/configs/config-dev.yaml
+/go.work*
+/logs
+/ui/node_modules
+/ui/build/*
+!/ui/build/favicon.ico
+/vendor
+Thumbs*.db
+tmp
+vendor/
+/answer-data/
+/answer
+/new_answer
+build/tools/
+dist/
+
+# Lint setup generated file
+.husky/
+
+# Environment variables
+.env

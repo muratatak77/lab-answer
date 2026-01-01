@@ -1,0 +1,168 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+#header {
+  z-index: 1041;
+  --bs-navbar-padding-y: 0.75rem;
+  background: var(--bs-primary);
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+  .logo {
+    max-height: 2rem;
+  }
+
+  .fixed-width {
+    padding-left: 28px;
+    padding-right: 36px;
+  }
+
+  .create-icon {
+    color: var(--bs-nav-link-color);
+  }
+
+  .nav-link {
+    &.icon-link {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  .search-mobile {
+    color: var(--bs-nav-link-color);
+  }
+
+  .answer-navBar {
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border: none;
+  }
+  .answer-navBar:focus {
+    box-shadow: none;
+  }
+
+  .xl-none {
+    display: none !important;
+  }
+
+  .hr {
+    color: var(--bs-navbar-color);
+  }
+
+  // style for colored navbar
+  &.theme-dark {
+    .placeholder-search {
+      padding-left: 42px;
+      box-shadow: none;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: $border-width $border-style rgba(255, 255, 255, 0.2);
+      &:focus {
+        border: $border-width $border-style $border-color;
+      }
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.75);
+      }
+    }
+    .search-icon {
+      color: #fff;
+    }
+  }
+
+  // style for colored navbar
+  &.theme-light {
+    .nav-link {
+      color: rgba(0, 0, 0, 0.65);
+    }
+    .placeholder-search {
+      padding-left: 42px;
+      box-shadow: none;
+      color: var(--bs-body-color);
+      background-color: rgba(255, 255, 255, 0.2);
+      border: $border-width $border-style rgba(0, 0, 0, 0.05);
+      &:focus {
+        border: $border-width $border-style $border-color;
+      }
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.65);
+      }
+    }
+    .search-icon {
+      color: var(--bs-body-color);
+    }
+  }
+
+  .maxw-560 {
+    max-width: 560px;
+  }
+
+  .search-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 13px;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 1199.9px) {
+  #header {
+    .fixed-width {
+      padding-right: 48px;
+    }
+    .nav-grow {
+      flex-grow: 1 !important;
+    }
+
+    .xl-none {
+      display: flex !important;
+    }
+
+    .maxw-400 {
+      max-width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  #header {
+    .fixed-width {
+      padding-left: 40px;
+      padding-right: 48px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #header {
+    .fixed-width {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    .nav-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+{{define "footer"}}
+        <div class="main-mx-with">
+          <div class="row">
+            <footer class="py-3 d-flex flex-wrap align-items-center justify-content-between text-secondary small">
+              <div class="d-flex align-items-center">
+                {{$cc := (join " " .siteinfo.General.Name .siteinfo.Year)}}
+                <div className="me-3">{{- $ft := translator $.language "ui.footer.build_on" "cc" $cc -}}</div>
+                <a class="me-3" href="{{$.baseURL}}/tos" data-discover="true" class="link-secondary">
+                  {{translator $.language "ui.admin.legal.terms_of_service.label"}}
+                </a>
+                <a href="{{$.baseURL}}/privacy" data-discover="true" class="link-secondary">
+                  {{translator $.language "ui.admin.legal.privacy_policy.label"}}
+                </a>
+              </div>
+              <div class="text-center mb-0 small text-secondary link-secondary">
+                {{templateHTML (replaceHTMLTag $ft "<a href=\"https://answer.apache.org/\" target=\"_blank\"> Answer </a>")}}
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--customize_footer-->
+{{if .FooterCode }}{{.FooterCode | templateHTML}}{{end}}
+<!--customize_footer-->
+</body>
+</html>
+{{end}}
