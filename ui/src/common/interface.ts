@@ -258,6 +258,15 @@ export interface QuestionDetailRes {
   [prop: string]: any;
 }
 
+export interface BookmarkNoteReq {
+  object_id: string;
+  note: string;
+}
+
+export interface BookmarkNoteRes {
+  note: string;
+}
+
 export interface AnswersReq extends Paging {
   order?: 'default' | 'updated' | 'created';
   question_id: string;

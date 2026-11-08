@@ -1820,6 +1820,8 @@ definitions:
         type: boolean
       collection_count:
         type: integer
+      collection_note:
+        type: string
       content:
         type: string
       create_time:
@@ -2917,6 +2919,26 @@ definitions:
     required:
     - id
     - status
+    type: object
+  schema.UpdateCollectionNoteReq:
+    properties:
+      note:
+        description: |-
+          the note, empty string means removing the note
+          the length limit is checked in the service after the note is normalized
+        maxLength: 500
+        type: string
+      object_id:
+        description: the bookmarked object id, only question is supported for now
+        type: string
+    required:
+    - object_id
+    type: object
+  schema.UpdateCollectionNoteResp:
+    properties:
+      note:
+        description: the note after normalized
+        type: string
     type: object
   schema.UpdateCommentReq:
     properties:
@@ -5598,6 +5620,36 @@ paths:
       summary: list all badges group by group
       tags:
       - api-badge
+  /answer/api/v1/collection/note:
+    put:
+      consumes:
+      - application/json
+      description: update the private note of the login user's bookmark, an empty
+        note removes it
+      parameters:
+      - description: collection note
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateCollectionNoteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.UpdateCollectionNoteResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: update the note of a bookmark
+      tags:
+      - Collection
   /answer/api/v1/collection/switch:
     post:
       consumes:

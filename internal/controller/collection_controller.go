@@ -60,3 +60,26 @@ func (cc *CollectionController) CollectionSwitch(ctx *gin.Context) {
 	resp, err := cc.collectionService.CollectionSwitch(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
+
+// UpdateCollectionNote update the note of a bookmark
+// @Summary update the note of a bookmark
+// @Description update the private note of the login user's bookmark, an empty note removes it
+// @Tags Collection
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.UpdateCollectionNoteReq true "collection note"
+// @Success 200 {object} handler.RespBody{data=schema.UpdateCollectionNoteResp}
+// @Router /answer/api/v1/collection/note [put]
+func (cc *CollectionController) UpdateCollectionNote(ctx *gin.Context) {
+	req := &schema.UpdateCollectionNoteReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.ObjectID = uid.DeShortID(req.ObjectID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	resp, err := cc.collectionService.UpdateCollectionNote(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}

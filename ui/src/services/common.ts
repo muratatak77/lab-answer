@@ -237,6 +237,13 @@ export const bookmark = (params: {
   return request.post('/answer/api/v1/collection/switch', params);
 };
 
+export const updateBookmarkNote = (params: Type.BookmarkNoteReq) => {
+  return request.put<Type.BookmarkNoteRes>(
+    '/answer/api/v1/collection/note',
+    params,
+  );
+};
+
 export const postVote = (
   params: { object_id: string; is_cancel: boolean } & Type.ImgCodeReq,
   type: 'down' | 'up',

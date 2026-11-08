@@ -3590,6 +3590,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/collection/note": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update the private note of the login user's bookmark, an empty note removes it",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Collection"
+                ],
+                "summary": "update the note of a bookmark",
+                "parameters": [
+                    {
+                        "description": "collection note",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateCollectionNoteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.UpdateCollectionNoteResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/collection/switch": {
             "post": {
                 "security": [
@@ -11079,6 +11130,9 @@ const docTemplate = `{
                 "collection_count": {
                     "type": "integer"
                 },
+                "collection_note": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -12691,6 +12745,32 @@ const docTemplate = `{
                             "$ref": "#/definitions/schema.BadgeStatus"
                         }
                     ]
+                }
+            }
+        },
+        "schema.UpdateCollectionNoteReq": {
+            "type": "object",
+            "required": [
+                "object_id"
+            ],
+            "properties": {
+                "note": {
+                    "description": "the note, empty string means removing the note\nthe length limit is checked in the service after the note is normalized",
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "object_id": {
+                    "description": "the bookmarked object id, only question is supported for now",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.UpdateCollectionNoteResp": {
+            "type": "object",
+            "properties": {
+                "note": {
+                    "description": "the note after normalized",
+                    "type": "string"
                 }
             }
         },
