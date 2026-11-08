@@ -263,6 +263,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// collection
 	r.POST("/collection/switch", a.collectionController.CollectionSwitch)
+	r.PUT("/collection/note", a.collectionController.UpdateCollectionNote)
 	r.GET("/personal/collection/page", a.questionController.PersonalCollectionPage)
 
 	// question

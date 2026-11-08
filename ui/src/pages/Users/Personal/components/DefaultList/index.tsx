@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom';
 
 import { FormatTime, Tag, BaseUserCard, Counts } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
+import BookmarkNote from '../BookmarkNote';
 
 interface Props {
   visible: boolean;
@@ -86,6 +87,9 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
                 return <Tag className="me-1" key={tag.slug_name} data={tag} />;
               })}
             </div>
+            {tabName === 'bookmarks' && (
+              <BookmarkNote objectId={item.id} note={item.collection_note} />
+            )}
           </ListGroupItem>
         );
       })}

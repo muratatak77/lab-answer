@@ -112,6 +112,7 @@ const (
 	InvalidURLError                  = "error.common.invalid_url"
 	MetaObjectNotFound               = "error.meta.object_not_found"
 	BadgeObjectNotFound              = "error.badge.object_not_found"
+	CollectionNotFound               = "error.collection.not_found"
 	StatusInvalid                    = "error.common.status_invalid"
 	UserStatusInactive               = "error.user.status_inactive"
 	UserStatusSuspendedForever       = "error.user.status_suspended_forever"

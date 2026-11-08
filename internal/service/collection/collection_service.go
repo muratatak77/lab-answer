@@ -22,10 +22,13 @@ package collection
 import (
 	"context"
 
+	"github.com/apache/answer/internal/base/reason"
 	"github.com/apache/answer/internal/entity"
 	"github.com/apache/answer/internal/schema"
 	collectioncommon "github.com/apache/answer/internal/service/collection_common"
 	questioncommon "github.com/apache/answer/internal/service/question_common"
+	"github.com/apache/answer/pkg/converter"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // CollectionService user service
@@ -83,4 +86,24 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, req *schema.C
 		return nil, err
 	}
 	return resp, nil
+}
+
+// UpdateCollectionNote update the private note of the login user's bookmark
+func (cs *CollectionService) UpdateCollectionNote(ctx context.Context, req *schema.UpdateCollectionNoteReq) (
+	resp *schema.UpdateCollectionNoteResp, err error) {
+	collection, exist, err := cs.collectionRepo.GetOneByObjectIDAndUser(ctx, req.UserID, req.ObjectID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.NotFound(reason.CollectionNotFound)
+	}
+
+	note := converter.NormalizePlainText(req.Note)
+	if note != collection.Note {
+		if err = cs.collectionRepo.UpdateCollectionNote(ctx, collection.ID, note); err != nil {
+			return nil, err
+		}
+	}
+	return &schema.UpdateCollectionNoteResp{Note: note}, nil
 }

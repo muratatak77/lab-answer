@@ -1297,7 +1297,8 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 	if err != nil {
 		return nil, err
 	}
-	for _, id := range questionIDs {
+	for _, item := range collectionList {
+		id := item.ObjectID
 		if handler.GetEnableShortID(ctx) {
 			id = uid.EnShortID(id)
 		}
@@ -1307,6 +1308,7 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 			questionMaps[id].UpdateUserInfo = nil
 			questionMaps[id].Content = ""
 			questionMaps[id].HTML = ""
+			questionMaps[id].CollectionNote = item.Note
 			if questionMaps[id].Status == entity.QuestionStatusDeleted {
 				questionMaps[id].Title = "Deleted question"
 			}

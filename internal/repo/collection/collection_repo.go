@@ -96,6 +96,17 @@ func (cr *collectionRepo) UpdateCollection(ctx context.Context, collection *enti
 	return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 }
 
+// UpdateCollectionNote update the note of the collection.
+// The updated_at column is left untouched on purpose, the bookmark list is ordered by it
+// and editing a note should not move the bookmark to the top of the list.
+func (cr *collectionRepo) UpdateCollectionNote(ctx context.Context, id string, note string) (err error) {
+	_, err = cr.data.DB.Context(ctx).ID(id).Cols("note").NoAutoTime().Update(&entity.Collection{Note: note})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 // GetCollection get collection one
 func (cr *collectionRepo) GetCollection(ctx context.Context, id int) (collection *entity.Collection, exist bool, err error) {
 	collection = &entity.Collection{}

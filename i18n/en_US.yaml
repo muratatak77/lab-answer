@@ -339,6 +339,9 @@ backend:
     badge:
       object_not_found:
         other: Badge object not found
+    collection:
+      not_found:
+        other: Bookmark not found. Please bookmark the question first.
   reason:
     spam:
       name:
@@ -1673,6 +1676,16 @@ ui:
     x_answers: answers
     x_questions: questions
     recent_badges: Recent Badges
+    bookmark_note:
+      label: Private note
+      add: Add a private note
+      edit: Edit
+      save: Save note
+      cancel: Cancel
+      placeholder: Only you can see this note. Why did you bookmark this question?
+      length: "{{ count }}/{{ max }}"
+      saved: Note saved.
+      removed: Note removed.
   install:
     title: Installation
     next: Next

@@ -262,6 +262,7 @@ type QuestionInfoResp struct {
 	Answered             bool           `json:"answered"`
 	FirstAnswerId        string         `json:"first_answer_id"`
 	Collected            bool           `json:"collected"`
+	CollectionNote       string         `json:"collection_note,omitempty"`
 	VoteStatus           string         `json:"vote_status"`
 	IsFollowed           bool           `json:"is_followed"`
 
