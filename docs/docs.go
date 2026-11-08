@@ -12755,7 +12755,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "note": {
-                    "description": "the note, empty string means removing the note",
+                    "description": "the note, empty string means removing the note\nthe length limit is checked in the service after the note is normalized",
                     "type": "string",
                     "maxLength": 500
                 },

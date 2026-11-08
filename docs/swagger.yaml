@@ -2923,7 +2923,9 @@ definitions:
   schema.UpdateCollectionNoteReq:
     properties:
       note:
-        description: the note, empty string means removing the note
+        description: |-
+          the note, empty string means removing the note
+          the length limit is checked in the service after the note is normalized
         maxLength: 500
         type: string
       object_id:
