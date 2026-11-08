@@ -1297,7 +1297,7 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 	if err != nil {
 		return nil, err
 	}
-	for _, id := range questionIDs {
+	for _, id := range questionIDs { // changed on the base while this PR was open (1794116527)
 		if handler.GetEnableShortID(ctx) {
 			id = uid.EnShortID(id)
 		}
