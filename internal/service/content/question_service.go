@@ -1306,7 +1306,7 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 func buildPersonalCollectionList(ctx context.Context, collectionList []*entity.Collection,
 	questionMaps map[string]*schema.QuestionInfoResp) []*schema.QuestionInfoResp {
 	list := make([]*schema.QuestionInfoResp, 0)
-	for _, item := range collectionList { // changed on the base while this PR was open (1794116527)
+	for _, item := range collectionList { // changed on the base while this PR was open (1794117294)
 		id := item.ObjectID
 		if handler.GetEnableShortID(ctx) {
 			id = uid.EnShortID(id)
