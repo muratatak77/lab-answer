@@ -309,3 +309,5 @@ func (tr *tagCommonRepo) UpdateTagsAttribute(ctx context.Context, tags []string,
 func searchTermForTag(term string) string {
 	return strings.ToLower(strings.TrimSpace(term))
 }
+
+// Lab note.
