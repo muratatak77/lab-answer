@@ -22,6 +22,7 @@ package collection
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/apache/answer/internal/base/reason"
@@ -52,6 +53,7 @@ func newFakeCollectionRepo(collections ...*entity.Collection) *fakeCollectionRep
 	return repo
 }
 
+// GetOneByObjectIDAndUser returns the bookmark stored for the user and object, or getErr if set.
 func (f *fakeCollectionRepo) GetOneByObjectIDAndUser(_ context.Context, userID string, objectID string) (
 	*entity.Collection, bool, error) {
 	if f.getErr != nil {
@@ -61,6 +63,7 @@ func (f *fakeCollectionRepo) GetOneByObjectIDAndUser(_ context.Context, userID s
 	return c, ok, nil
 }
 
+// UpdateCollectionNote counts the call and saves the note, or returns updateErr if set.
 func (f *fakeCollectionRepo) UpdateCollectionNote(_ context.Context, id string, note string) error {
 	f.updateCalls++
 	if f.updateErr != nil {
@@ -141,6 +144,46 @@ func TestCollectionService_UpdateCollectionNote(t *testing.T) {
 		assert.Equal(t, reason.CollectionNotFound, e.Reason)
 		assert.Equal(t, "mine", bookmark.Note)
 		assert.Zero(t, repo.updateCalls)
+	})
+
+	t.Run("length limit applies to the normalized note", func(t *testing.T) {
+		tests := []struct {
+			name    string
+			note    string
+			want    string
+			tooLong bool
+		}{
+			{name: "500 runes after CRLF and trailing spaces are removed",
+				note: strings.Repeat("ab\r\n", 166) + "xy  \r\n\r\n\r\n", want: strings.Repeat("ab\n", 166) + "xy"},
+			{name: "500 multi-byte runes", note: strings.Repeat("é", 500), want: strings.Repeat("é", 500)},
+			{name: "501 runes", note: strings.Repeat("é", 501), tooLong: true},
+		}
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				bookmark := &entity.Collection{ID: "10", UserID: "1", ObjectID: "100", Note: "old"}
+				repo := newFakeCollectionRepo(bookmark)
+				svc := NewCollectionService(repo, nil, nil)
+
+				resp, err := svc.UpdateCollectionNote(ctx, &schema.UpdateCollectionNoteReq{
+					ObjectID: "100",
+					UserID:   "1",
+					Note:     tt.note,
+				})
+				if tt.tooLong {
+					assert.Nil(t, resp)
+					var e *pacmanErrors.Error
+					require.ErrorAs(t, err, &e)
+					assert.Equal(t, reason.CollectionNoteTooLong, e.Reason)
+					assert.Equal(t, "old", bookmark.Note)
+					assert.Zero(t, repo.updateCalls)
+					return
+				}
+				require.NoError(t, err)
+				assert.Greater(t, len(tt.note), 500)
+				assert.Equal(t, tt.want, resp.Note)
+				assert.Equal(t, tt.want, bookmark.Note)
+			})
+		}
 	})
 
 	t.Run("repository errors are returned", func(t *testing.T) {

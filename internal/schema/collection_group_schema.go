@@ -44,7 +44,8 @@ type UpdateCollectionNoteReq struct {
 	// the bookmarked object id, only question is supported for now
 	ObjectID string `validate:"required" json:"object_id"`
 	// the note, empty string means removing the note
-	Note   string `validate:"omitempty,lte=500" json:"note"`
+	// the length limit is checked in the service after the note is normalized
+	Note   string `maxLength:"500" json:"note"`
 	UserID string `json:"-"`
 }
 

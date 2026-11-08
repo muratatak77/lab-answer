@@ -21,6 +21,7 @@ package collection
 
 import (
 	"context"
+	"unicode/utf8"
 
 	"github.com/apache/answer/internal/base/reason"
 	"github.com/apache/answer/internal/entity"
@@ -88,6 +89,10 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, req *schema.C
 	return resp, nil
 }
 
+// maxCollectionNoteLength is the max length of a bookmark note in runes,
+// it matches the VARCHAR(500) note column
+const maxCollectionNoteLength = 500
+
 // UpdateCollectionNote update the private note of the login user's bookmark
 func (cs *CollectionService) UpdateCollectionNote(ctx context.Context, req *schema.UpdateCollectionNoteReq) (
 	resp *schema.UpdateCollectionNoteResp, err error) {
@@ -99,7 +104,12 @@ func (cs *CollectionService) UpdateCollectionNote(ctx context.Context, req *sche
 		return nil, errors.NotFound(reason.CollectionNotFound)
 	}
 
+	// the limit applies to the stored note, so it is checked after normalizing,
+	// counted in runes like the validator's lte
 	note := converter.NormalizePlainText(req.Note)
+	if utf8.RuneCountInString(note) > maxCollectionNoteLength {
+		return nil, errors.BadRequest(reason.CollectionNoteTooLong)
+	}
 	if note != collection.Note {
 		if err = cs.collectionRepo.UpdateCollectionNote(ctx, collection.ID, note); err != nil {
 			return nil, err

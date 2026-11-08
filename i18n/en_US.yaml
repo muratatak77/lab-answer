@@ -342,6 +342,8 @@ backend:
     collection:
       not_found:
         other: Bookmark not found. Please bookmark the question first.
+      note_too_long:
+        other: Note cannot be longer than 500 characters.
   reason:
     spam:
       name:
