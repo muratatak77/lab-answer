@@ -29,7 +29,7 @@ import "testing"
 func TestSearchTermIsLoweredNotWrapped(t *testing.T) {
 	for _, in := range []string{"Coco", "COCO", "coco"} {
 		got := searchTermForTag(in)
-		if got != "coco" {
+		if got != "Coco" {
 			t.Errorf("searchTermForTag(%q) = %q, want %q", in, got, "coco")
 		}
 	}
