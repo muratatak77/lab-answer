@@ -29,6 +29,16 @@ import './index.scss';
 
 export const NOTE_MAX_LENGTH = 500;
 
+// The server validates the note length in Unicode code points (Go runes),
+// while String.length and the textarea maxLength count UTF-16 code units,
+// so emoji and other astral characters would be counted twice here.
+const noteLength = (text: string) => [...text].length;
+
+const clampNote = (text: string) =>
+  noteLength(text) > NOTE_MAX_LENGTH
+    ? [...text].slice(0, NOTE_MAX_LENGTH).join('')
+    : text;
+
 interface Props {
   objectId: string;
   note?: string;
@@ -106,11 +116,10 @@ const Index: FC<Props> = ({ objectId, note = '' }) => {
             rows={3}
             autoFocus
             value={draft}
-            maxLength={NOTE_MAX_LENGTH}
             placeholder={t('placeholder')}
             isInvalid={!!errorMsg}
             disabled={saving}
-            onChange={(e) => setDraft(e.currentTarget.value)}
+            onChange={(e) => setDraft(clampNote(e.currentTarget.value))}
             onKeyDown={handleKeyDown}
           />
           <Form.Control.Feedback type="invalid">
@@ -130,7 +139,7 @@ const Index: FC<Props> = ({ objectId, note = '' }) => {
             {t('cancel')}
           </Button>
           <span className="ms-auto small text-secondary">
-            {t('length', { count: draft.length, max: NOTE_MAX_LENGTH })}
+            {t('length', { count: noteLength(draft), max: NOTE_MAX_LENGTH })}
           </span>
         </div>
       </Form>

@@ -1279,7 +1279,6 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 // PersonalCollectionPage get collection list by user
 func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *schema.PersonalCollectionPageReq) (
 	pageModel *pager.PageModel, err error) {
-	list := make([]*schema.QuestionInfoResp, 0)
 	collectionSearch := &entity.CollectionSearch{}
 	collectionSearch.UserID = req.UserID
 	collectionSearch.Page = req.Page
@@ -1297,6 +1296,16 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 	if err != nil {
 		return nil, err
 	}
+	list := buildPersonalCollectionList(ctx, collectionList, questionMaps)
+	return pager.NewPageModel(total, list), nil
+}
+
+// buildPersonalCollectionList keeps the order of collectionList, attaches each bookmark's private note
+// and strips the fields the personal bookmark list does not show. questionMaps is keyed by the
+// question id as returned by FindInfoByID, which is the short id when short ids are enabled.
+func buildPersonalCollectionList(ctx context.Context, collectionList []*entity.Collection,
+	questionMaps map[string]*schema.QuestionInfoResp) []*schema.QuestionInfoResp {
+	list := make([]*schema.QuestionInfoResp, 0)
 	for _, item := range collectionList {
 		id := item.ObjectID
 		if handler.GetEnableShortID(ctx) {
@@ -1316,7 +1325,7 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 		}
 	}
 
-	return pager.NewPageModel(total, list), nil
+	return list
 }
 
 func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName string, loginUserID string) ([]*schema.UserQuestionInfo, []*schema.UserAnswerInfo, error) {
