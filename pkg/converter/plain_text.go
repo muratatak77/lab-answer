@@ -39,7 +39,7 @@ func NormalizePlainText(text string) string {
 
 	lines := make([]string, 0)
 	blank := false
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		line = strings.TrimRightFunc(line, unicode.IsSpace)
 		if len(line) == 0 {
 			if blank {

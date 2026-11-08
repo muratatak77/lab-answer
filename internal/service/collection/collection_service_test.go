@@ -137,7 +137,7 @@ func TestCollectionService_UpdateCollectionNote(t *testing.T) {
 		assert.Nil(t, resp)
 		require.Error(t, err)
 		var e *pacmanErrors.Error
-		require.True(t, errors.As(err, &e))
+		require.ErrorAs(t, err, &e)
 		assert.Equal(t, reason.CollectionNotFound, e.Reason)
 		assert.Equal(t, "mine", bookmark.Note)
 		assert.Zero(t, repo.updateCalls)
@@ -153,7 +153,7 @@ func TestCollectionService_UpdateCollectionNote(t *testing.T) {
 			UserID:   "1",
 			Note:     "note",
 		})
-		assert.EqualError(t, err, "db is gone")
+		require.EqualError(t, err, "db is gone")
 
 		repo.getErr = errors.New("query failed")
 		_, err = svc.UpdateCollectionNote(ctx, &schema.UpdateCollectionNoteReq{
